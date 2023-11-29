@@ -44,6 +44,15 @@ export default function Home() {
       case 1:
         setPunSubtext(`Oh god, it's starting...`)
         break
+      case 69:
+        setPunSubtext(`Nice`)
+        break
+      case 420:
+        setPunSubtext(`frfr ong`)
+        break
+      case 666:
+        setPunSubtext(`The devil is here`)
+        break
       default:
         setPunSubtext(getUniqueSubtext())       
         break
