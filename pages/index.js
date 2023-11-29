@@ -8,8 +8,6 @@ export default function Home() {
 
   const getUniqueSubtext = () => {
     const allPunSubtexts = [
-      `Phew, no puns (yet)`,
-      `Oh god, it's starting...`,
       `Send help`,
       `Getting worse...`,
       `Tell my family I love them`,
