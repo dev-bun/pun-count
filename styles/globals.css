@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: #333;
+  font-family: 'Open Sans', sans-serif;
+  transition: background-color 1s linear;
+}
+
+
+.pun0 {
+  background-color: #f5f5f5;
+}
+
+.pun1 {
+  background-color: #e6c571;
+}
+
+.pun2 {
+  background-color: #db8a34;
+}
+
+.pun3 {
+  background-color: #e27441;
+  color: #fff;
+}
+
+.pun4 {
+  background-color: #ef571b;
+  color: #fff;
+}
+
+.pun5 {
+  background-color: #ef2424;
+  color: #fff;
+}
+
+.punTooMany {
+  background-color: rgb(154, 0, 0);
+  color: #fff;
+}
