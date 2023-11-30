@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
+import { useReward } from 'react-rewards';
 
 export default function Home() {
   const [puns, setPuns] = useState(0)
 
   const [punClass, setPunClass] = useState(`pun0`)
   const [punSubtext, setPunSubtext] = useState(``)
+
+  const [emojis, setEmojis] = useState(['💀', '😭'])
+
+  const { reward, isAnimating } = useReward('rewardId', 'emoji', {
+    angle: 90,
+    emoji: emojis
+  })
 
   const getUniqueSubtext = () => {
     const allPunSubtexts = [
@@ -30,7 +38,42 @@ export default function Home() {
     return uniqueSubtexts[Math.floor(Math.random() * uniqueSubtexts.length)]
   }
 
+  const makeEmojiArray = () => {
+    const emojiArray = []
+
+    const possibleEmojis = [
+      '💀',
+      '😭',
+      '🤡',
+      '🤢',
+      '🤮',
+      '🤯',
+      '🥵',
+      '🥶',
+      '🤬',
+      '🤫',
+      '🤥',
+      '🤔',
+    ]
+
+    // generate a random array of 4 unique emojis
+    while (emojiArray.length < 4) {
+      const randomEmoji = possibleEmojis[Math.floor(Math.random() * possibleEmojis.length)]
+      if (!emojiArray.includes(randomEmoji)) {
+        emojiArray.push(randomEmoji)
+      }
+    }
+
+    setEmojis(emojiArray)
+  }
+
   useEffect(() => {
+    makeEmojiArray()
+  }, [])
+
+  useEffect(() => {
+    if (puns % 5 === 0 && puns !== 0) reward();
+
     if (puns <= 5) {
       setPunClass(`pun${puns}`)
     } else {
@@ -60,10 +103,27 @@ export default function Home() {
 
   }, [puns])
 
+  const handleClick = () => setPuns(puns + 1);
+
+  // on spacebar press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space') {
+        setPuns(puns + 1)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [puns])
+
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen py-2 select-none cursor-pointer ${punClass}`} onClick={() => setPuns(puns + 1)}>
+    <div className={`flex flex-col items-center justify-center min-h-screen py-2 select-none cursor-pointer ${punClass}`} onClick={handleClick}>
       <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-        <h1 className="text-9xl font-bold">
+        <h1 className="text-9xl font-bold" id="rewardId">
           {puns}
         </h1>
         <h2 className="text-4xl font-bold">
