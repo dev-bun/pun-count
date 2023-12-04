@@ -85,7 +85,7 @@ export default function Home() {
     makeEmojiArray()
   }, [])
 
-  useEffect(() => {
+  const handlePunIncrease = () => {
     if (puns % 1000 === 0 && puns !== 0) reward();
 
     if (puns <= 5) {
@@ -114,8 +114,37 @@ export default function Home() {
         setPunSubtext(getUniqueSubtext())       
         break
     }
+  }
 
+  useEffect(() => {
+    handlePunIncrease()
   }, [puns])
+
+  // watch document.getElementById('punNumber').innerText
+  // execute handlePunIncrease() when it changes
+
+  // we can't use useEffect because it doesn't watch for changes in the DOM
+  // so we have to use a mutation observer
+  useEffect(() => {
+    const targetNode = document.getElementById('punNumber')
+    const config = { attributes: true, childList: true, subtree: true }
+    const callback = function (mutationsList, observer) {
+      console.log('mutation observed')
+      for (const mutation of mutationsList) {
+        if (mutation.target.id === 'punNumber') {
+          setPuns(parseInt(mutation.target.innerText))
+        }
+      }
+    }
+
+    const observer = new MutationObserver(callback)
+
+    observer.observe(targetNode, config)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const handleIncrease = () => {
     // IF ITS PUN #5, SHOW A POPUP SAYING ARE YOU SURE YOU WANT TO CONTINUE
@@ -148,15 +177,18 @@ export default function Home() {
   }, [puns])
 
   return (
-    <div className={`overflow-hidden flex flex-col items-center justify-center min-h-screen py-2 select-none cursor-pointer ${punClass}`} onClick={handleIncrease}>
-      <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-        <h1 className="text-9xl font-bold" id="rewardId">
-          {puns}
-        </h1>
-        <h2 className="text-4xl font-bold">
-          {punSubtext}
-        </h2>
-      </main>
-    </div>
+    <>
+      <script src="./script.js"></script>
+      <div className={`overflow-hidden flex flex-col items-center justify-center min-h-screen py-2 select-none cursor-pointer ${punClass}`} onClick={handleIncrease}>
+        <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
+          <h1 className="text-9xl font-bold" id="rewardId">
+            <span id="punNumber">{puns}</span>
+          </h1>
+          <h2 className="text-4xl font-bold">
+            {punSubtext}
+          </h2>
+        </main>
+      </div>
+    </>
   )
 }
